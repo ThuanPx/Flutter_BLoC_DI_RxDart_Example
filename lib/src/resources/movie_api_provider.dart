@@ -1,15 +1,25 @@
-import 'package:blocexample/src/models/item_model.dart';
-import 'package:blocexample/src/models/trailer_model.dart';
-import 'package:http/http.dart';
+import 'dart:async';
 import 'dart:convert';
+import 'package:http/http.dart' show Client, Response;
+import '../models/item_model.dart';
+import '../models/trailer_model.dart';
+import 'package:inject/inject.dart';
 
-class MovieApiProvide {
-  Client client = Client();
-  final _apiKey = "1723eee1f88053090f19c9c3c3cfcb97";
+class MovieApiProvider {
+  final Client client;
+  final _apiKey = '1723eee1f88053090f19c9c3c3cfcb97';
   final _baseUrl = "http://api.themoviedb.org/3/movie";
 
+  @provide
+  MovieApiProvider(this.client);
+
   Future<ItemModel> fetchMovieList() async {
-    final response = await client.get("$_baseUrl/popular?api_key=$_apiKey");
+    Response response;
+    if(_apiKey != 'api-key') {
+      response = await client.get("$_baseUrl/popular?api_key=$_apiKey");
+    }else{
+      throw Exception('Please add your API key');
+    }
     if (response.statusCode == 200) {
       // If the call to the server was successful, parse the JSON
       return ItemModel.fromJson(json.decode(response.body));

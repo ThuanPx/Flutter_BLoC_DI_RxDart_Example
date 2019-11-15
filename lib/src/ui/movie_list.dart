@@ -1,11 +1,12 @@
-import 'package:blocexample/src/blocs/movie_detail_bloc_provider.dart';
-import 'package:blocexample/src/blocs/movies_bloc.dart';
-import 'package:blocexample/src/models/item_model.dart';
-import 'package:blocexample/src/ui/movie_detail.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../models/item_model.dart';
+import '../blocs/movies_bloc.dart';
 
 class MovieList extends StatefulWidget {
+  final MoviesBloc _bloc;
+
+  MovieList(this._bloc);
+
   @override
   State<StatefulWidget> createState() {
     return MovieListState();
@@ -16,12 +17,13 @@ class MovieListState extends State<MovieList> {
   @override
   void initState() {
     super.initState();
-    bloc.fetchAllMovies();
+    widget._bloc.init();
+    widget._bloc.fetchAllMovies();
   }
 
   @override
   void dispose() {
-    bloc.dispose();
+    widget._bloc.dispose();
     super.dispose();
   }
 
@@ -32,7 +34,7 @@ class MovieListState extends State<MovieList> {
         title: Text('Popular Movies'),
       ),
       body: StreamBuilder(
-        stream: bloc.allMovies,
+        stream: widget._bloc.allMovies,
         builder: (context, AsyncSnapshot<ItemModel> snapshot) {
           if (snapshot.hasData) {
             return buildList(snapshot);
@@ -66,20 +68,8 @@ class MovieListState extends State<MovieList> {
   }
 
   openDetailPage(ItemModel data, int index) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) {
-        return MovieDetailBlocProvider(
-          child: MovieDetail(
-            title: data.results[index].title,
-            posterUrl: data.results[index].backdrop_path,
-            description: data.results[index].overview,
-            releaseDate: data.results[index].release_date,
-            voteAverage: data.results[index].vote_average.toString(),
-            movieId: data.results[index].id,
-          ),
-        );
-      }),
-    );
+    Navigator.pushNamed(
+        context,
+        'movieDetail', arguments: data.results[index]);
   }
 }

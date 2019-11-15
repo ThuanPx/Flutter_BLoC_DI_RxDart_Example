@@ -1,11 +1,17 @@
-import 'package:blocexample/src/models/item_model.dart';
-import 'package:blocexample/src/models/trailer_model.dart';
-import 'package:blocexample/src/resources/movie_api_provider.dart';
+import 'dart:async';
+import 'movie_api_provider.dart';
+import '../models/item_model.dart';
+import '../models/trailer_model.dart';
+import 'package:inject/inject.dart';
 
 class Repository {
-  final moviesApiProvider = MovieApiProvide();
+
+  final MovieApiProvider moviesApiProvider;
+
+  @provide
+  Repository(this.moviesApiProvider);
 
   Future<ItemModel> fetchAllMovies() => moviesApiProvider.fetchMovieList();
 
-  Future<TrailerModel> fetchTrainer(int movieId) => moviesApiProvider.fetchTrailer(movieId);  
+  Future<TrailerModel> fetchTrailers(int movieId) => moviesApiProvider.fetchTrailer(movieId);
 }
