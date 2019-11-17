@@ -1,28 +1,27 @@
 import 'dart:async';
-import 'dart:convert';
-import 'package:http/http.dart' show Client, Response;
+import 'package:dio/dio.dart';
 import '../models/item_model.dart';
 import '../models/trailer_model.dart';
 import 'package:inject/inject.dart';
+import '../ultis/constants.dart';
 
 class MovieApiProvider {
-  final Client client;
-  final _apiKey = '1723eee1f88053090f19c9c3c3cfcb97';
-  final _baseUrl = "http://api.themoviedb.org/3/movie";
+  final Dio client;
 
   @provide
   MovieApiProvider(this.client);
 
   Future<ItemModel> fetchMovieList() async {
     Response response;
-    if(_apiKey != 'api-key') {
-      response = await client.get("$_baseUrl/popular?api_key=$_apiKey");
+    if(API_KEY != 'api-key') {
+      response = await client.get("$BASE_URL/popular?api_key=$API_KEY");
     }else{
       throw Exception('Please add your API key');
     }
     if (response.statusCode == 200) {
       // If the call to the server was successful, parse the JSON
-      return ItemModel.fromJson(json.decode(response.body));
+      print(response.data);
+      return ItemModel.fromJson(response.data);
     } else {
       // If that call was not successful, throw an error.
       throw Exception('Failed to load post');
@@ -31,9 +30,9 @@ class MovieApiProvider {
 
   Future<TrailerModel> fetchTrailer(int movieId) async {
     final response =
-        await client.get("$_baseUrl/$movieId/videos?api_key=$_apiKey");
+        await client.get("$BASE_URL/$movieId/videos?api_key=$API_KEY");
     if (response.statusCode == 200) {
-      return TrailerModel.fromJson(json.decode(response.body));
+      return TrailerModel.fromJson(response.data);
     } else {
       throw Exception('Failed to load trailers');
     }

@@ -2,9 +2,10 @@ import 'package:inject/inject.dart';
 import '../app.dart';
 import 'bloc_module.dart';
 import 'bloc_injector.inject.dart' as g;
+import 'network_module.dart';
 
-@Injector(const [BlocModule])
-abstract class BlocInjector{
+@Injector(const [BlocModule, NetWorkModule])
+abstract class BlocInjector {
   @provide
   App get app;
 
