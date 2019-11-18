@@ -1,3 +1,4 @@
+import 'package:blocexample/src/ultis/app_localizations.dart';
 import 'package:flutter/material.dart';
 import '../models/item_model.dart';
 import '../blocs/movies_bloc.dart';
@@ -31,7 +32,7 @@ class MovieListState extends State<MovieList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Popular Movies'),
+        title: Text(AppLocalizations.of(context).home),
       ),
       body: StreamBuilder(
         stream: widget._bloc.allMovies,
@@ -50,15 +51,13 @@ class MovieListState extends State<MovieList> {
   Widget buildList(AsyncSnapshot<ItemModel> snapshot) {
     return GridView.builder(
         itemCount: snapshot.data.results.length,
-        gridDelegate:
-        new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+        gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         itemBuilder: (BuildContext context, int index) {
           return GridTile(
             child: InkResponse(
               enableFeedback: true,
               child: Image.network(
-                'https://image.tmdb.org/t/p/w185${snapshot.data
-                    .results[index].poster_path}',
+                'https://image.tmdb.org/t/p/w185${snapshot.data.results[index].poster_path}',
                 fit: BoxFit.cover,
               ),
               onTap: () => openDetailPage(snapshot.data, index),
@@ -68,8 +67,6 @@ class MovieListState extends State<MovieList> {
   }
 
   openDetailPage(ItemModel data, int index) {
-    Navigator.pushNamed(
-        context,
-        'movieDetail', arguments: data.results[index]);
+    Navigator.pushNamed(context, 'movieDetail', arguments: data.results[index]);
   }
 }

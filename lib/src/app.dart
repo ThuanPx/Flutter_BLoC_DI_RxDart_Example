@@ -1,4 +1,6 @@
+import 'package:blocexample/src/ultis/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'ui/movie_list.dart';
 import 'package:inject/inject.dart';
 import 'ui/movie_detail.dart';
@@ -16,6 +18,16 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      localizationsDelegates: [
+        const DemoLocalizationsDelegate(),
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('en', ''),
+        const Locale('vi', ''),
+      ],
       theme: ThemeData.dark(),
       initialRoute: '/',
       onGenerateRoute: (settings){

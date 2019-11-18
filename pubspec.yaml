@@ -13,6 +13,8 @@ dependencies:
   rxdart: ^0.18.0
   http: ^0.12.0+1
   dio: ^3.0.4
+  flutter_localizations:
+    sdk: flutter
   inject:
     path: ./injection/inject.dart/package/inject
 
